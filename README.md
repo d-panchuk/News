@@ -41,7 +41,7 @@ DataSource details:
 
 ## Other
 
-Tools used: Xcode 10, Swift 4.2.
+Tools used: Xcode 11, Swift 5.
 Third-party dependencies: RxSwift, RxCocoa, RxTest Kingfisher.
 
 ## Todo
