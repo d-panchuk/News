@@ -16,7 +16,6 @@
 		321D8552238577AC00EC4FC2 /* NewsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 321D8551238577AC00EC4FC2 /* NewsTests.swift */; };
 		321D85622385855700EC4FC2 /* DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 321D85612385855700EC4FC2 /* DataSource.swift */; };
 		321D85652385859000EC4FC2 /* RemoteDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 321D85642385859000EC4FC2 /* RemoteDataSource.swift */; };
-		32E10573238821D50018E2BD /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32E10572238821D50018E2BD /* Result.swift */; };
 		32E2E75D2385897300C8E7CF /* ArticleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32E2E75C2385897300C8E7CF /* ArticleViewController.swift */; };
 		32E2E77423858D6800C8E7CF /* NewsApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32E2E75F23858D6800C8E7CF /* NewsApi.swift */; };
 		32E2E77723858D6800C8E7CF /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32E2E76323858D6800C8E7CF /* NetworkManager.swift */; };
@@ -81,7 +80,6 @@
 		321D8553238577AC00EC4FC2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		321D85612385855700EC4FC2 /* DataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSource.swift; sourceTree = "<group>"; };
 		321D85642385859000EC4FC2 /* RemoteDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteDataSource.swift; sourceTree = "<group>"; };
-		32E10572238821D50018E2BD /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		32E2E75C2385897300C8E7CF /* ArticleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleViewController.swift; sourceTree = "<group>"; };
 		32E2E75F23858D6800C8E7CF /* NewsApi.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsApi.swift; sourceTree = "<group>"; };
 		32E2E76323858D6800C8E7CF /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
@@ -332,7 +330,6 @@
 			children = (
 				32E2E78B2385A44E00C8E7CF /* Coordinator.swift */,
 				32E2E7C12387DFC900C8E7CF /* Date+ElapsedTime.swift */,
-				32E10572238821D50018E2BD /* Result.swift */,
 				32E2E7AB2385F20C00C8E7CF /* Reusable.swift */,
 				32E2E7982385C26800C8E7CF /* Storyboarded.swift */,
 				32E2E7BF238753C500C8E7CF /* UIDevice+Reachability.swift */,
@@ -595,7 +592,6 @@
 				32E2E7862385900200C8E7CF /* AppConstants.swift in Sources */,
 				32E2E7B72386D97000C8E7CF /* ApiError.swift in Sources */,
 				321D853F238577A900EC4FC2 /* NewsFeedViewController.swift in Sources */,
-				32E10573238821D50018E2BD /* Result.swift in Sources */,
 				32E2E78023858D6800C8E7CF /* URLSessionNetworkDispatcher.swift in Sources */,
 				32E2E7A42385DC8800C8E7CF /* UIScrollView+EdgeDetection.swift in Sources */,
 				321D853D238577A900EC4FC2 /* AppDelegate.swift in Sources */,
@@ -779,7 +775,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.practice.News;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -798,7 +794,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.practice.News;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -819,7 +815,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.practice.NewsTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/News.app/News";
 			};
@@ -841,7 +837,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.practice.NewsTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/News.app/News";
 			};

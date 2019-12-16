@@ -1,13 +1,13 @@
 target 'News' do
   use_frameworks!
 
-  pod 'RxCocoa' , '~> 4.2'
-  pod 'RxSwift' , '~> 4.2'
-  pod 'Kingfisher', '~> 4.2'
+  pod 'RxCocoa'
+  pod 'RxSwift'
+  pod 'Kingfisher'
 
   target 'NewsTests' do
     inherit! :search_paths
-    pod 'RxTest', '~> 4.2'
+    pod 'RxTest'
   end
 
 end

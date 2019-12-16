@@ -41,9 +41,8 @@ private extension AppDelegate {
     }
     
     func setupRxResourceLogging() {
-        let updateIntervalInSeconds = RxTimeInterval(1)
         _ = Observable<Int>
-            .interval(updateIntervalInSeconds, scheduler: MainScheduler.instance)
+            .interval(.seconds(1), scheduler: MainScheduler.instance)
             .subscribe { _ in
                 print("RxSwift resources count: \(RxSwift.Resources.total).")
         }

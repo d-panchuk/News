@@ -68,9 +68,8 @@ final class NewsFeedViewController: UIViewController, Storyboarded {
             }
             .disposed(by: disposeBag)
         
-        let errorThrottleInSeconds = RxTimeInterval(3)
         viewModel.errorMessage
-            .throttle(errorThrottleInSeconds)
+            .throttle(.seconds(3))
             .drive(onNext: { self.presentAlert(message: $0) })
             .disposed(by: disposeBag)
     }
@@ -80,9 +79,8 @@ final class NewsFeedViewController: UIViewController, Storyboarded {
             .bind(to: viewModel.reloadTrigger)
             .disposed(by: disposeBag)
         
-        let articleUpdateThrottleInSeconds = RxTimeInterval(1)
         let articlesTableViewUpdate = articlesTableView.rx.contentOffset
-            .throttle(articleUpdateThrottleInSeconds, scheduler: MainScheduler.instance)
+            .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .filter { _ in self.articlesTableView.isNearBottomEdge() }
             .flatMapLatest { _ in Observable.just(()) }
         
