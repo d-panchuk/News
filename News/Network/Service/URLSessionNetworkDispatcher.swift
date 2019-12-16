@@ -90,7 +90,6 @@ private extension URLSessionNetworkDispatcher {
     func buildPathWithParams(from requestData: RequestData) -> String {
         var components = URLComponents(string: requestData.endpoint.path)
         
-        
         components?.queryItems =
             requestData.parameters
             .compactMapValues { $0 as? String }
@@ -99,14 +98,4 @@ private extension URLSessionNetworkDispatcher {
         return components?.url?.absoluteString ?? requestData.endpoint.path
     }
     
-}
-
-extension Dictionary {
-    public func compactMapValues<T>(_ transform: (Value) throws -> T?) rethrows -> [Key: T] {
-        return try self.reduce(into: [Key: T](), { (result, x) in
-            if let value = try transform(x.value) {
-                result[x.key] = value
-            }
-        })
-    }
 }
