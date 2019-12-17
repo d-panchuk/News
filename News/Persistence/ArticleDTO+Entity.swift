@@ -8,9 +8,11 @@
 
 import Foundation
 
+extension ArticleEntity: ArticleEntityProtocol {}
+
 extension ArticleDTO {
     
-    init?(from entity: ArticleEntity) {
+    init?(from entity: ArticleEntityProtocol) {
         guard let sourceName = entity.sourceName,
             let title = entity.title,
             let url = entity.url,
