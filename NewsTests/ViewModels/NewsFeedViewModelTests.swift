@@ -11,7 +11,6 @@ import XCTest
 import RxTest
 import RxSwift
 
-
 class NewsFeedViewModelTests: XCTestCase {
 
     var testScheduler: TestScheduler!
