@@ -18,4 +18,12 @@ extension NewsFeed {
         )
     }
     
+    static func makeArticleCellProps(from viewModel: ArticleViewModel) -> ArticleTableViewCell.Props {
+        return ArticleTableViewCell.Props(
+            imageUrlPath: viewModel.urlToImage,
+            title: viewModel.title,
+            description: viewModel.description
+        )
+    }
+    
 }

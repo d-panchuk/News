@@ -58,7 +58,8 @@ final class NewsFeedViewController: UIViewController, Storyboarded {
                 cellIdentifier: ArticleTableViewCell.reuseIdentifier,
                 cellType: ArticleTableViewCell.self)
             ) { (_, articleViewModel, cell) in
-                cell.configure(from: articleViewModel)
+                let props = NewsFeed.makeArticleCellProps(from: articleViewModel)
+                cell.renderProps(props)
             }
             .disposed(by: disposeBag)
     }
@@ -112,7 +113,6 @@ final class NewsFeedViewController: UIViewController, Storyboarded {
         
         //.throttle(3)
         if let errorMessage = props.errorMessage, renderedProps?.errorMessage != errorMessage {
-            //errorPresenter.present(error: error, on: self)
             presentAlert(message: errorMessage)
         }
         

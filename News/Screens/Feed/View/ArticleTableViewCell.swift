@@ -10,6 +10,12 @@ import UIKit
 
 final class ArticleTableViewCell: UITableViewCell, Reusable {
 
+    struct Props {
+        let imageUrlPath: String?
+        let title: String
+        let description: String?
+    }
+    
     // MARK: Outlets
     @IBOutlet private weak var _imageView: UIImageView!
     @IBOutlet private weak var titleLabel: UILabel!
@@ -22,10 +28,10 @@ final class ArticleTableViewCell: UITableViewCell, Reusable {
     }
     
     // MARK: Public methods
-    func configure(from viewModel: ArticleViewModel) {
-        _imageView.setImage(from: viewModel.urlToImage)
-        titleLabel.text = viewModel.title
-        descriptionLabel.text = viewModel.description
+    func renderProps(_ props: Props) {
+        _imageView.setImage(from: props.imageUrlPath)
+        titleLabel.text = props.title
+        descriptionLabel.text = props.description
     }
     
 }
