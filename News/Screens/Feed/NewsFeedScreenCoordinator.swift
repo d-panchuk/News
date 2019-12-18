@@ -41,8 +41,25 @@ final class NewsFeedScreenCoordinator: BaseCoordinator {
     
     private func showArticleViewController(of model: ArticleViewModel) {
         let articleVC = ArticleViewController.instantiate()
-        articleVC.viewModel = ArticleScreenViewModel(model: model)
+        let articleProps = makeArticleProps(from: model)
+        _ = articleVC.view // FIXME
+        articleVC.renderProps(articleProps)
         presenter.pushViewController(articleVC, animated: true)
+    }
+    
+    private func makeArticleProps(from model: ArticleViewModel) -> ArticleViewController.Props {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = AppConstants.Network.dateFormat
+        let publishDate = dateFormatter.date(from: model.publishedAt)
+        
+        return ArticleViewController.Props(
+            title: model.title,
+            imageUrlPath: model.urlToImage,
+            source: model.sourceName,
+            publishTime: publishDate?.getElapsedTime() ?? "",
+            content: model.content ?? "",
+            linkURL: URL(string: model.url)
+        )
     }
     
 }

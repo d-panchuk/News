@@ -52,7 +52,6 @@
 		32E2E7AA2385ED7400C8E7CF /* ArticleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32E2E7A82385ED7400C8E7CF /* ArticleTableViewCell.xib */; };
 		32E2E7AC2385F20C00C8E7CF /* Reusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32E2E7AB2385F20C00C8E7CF /* Reusable.swift */; };
 		32E2E7AE2386A10100C8E7CF /* GetEverythingNewsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32E2E7AD2386A10100C8E7CF /* GetEverythingNewsRequest.swift */; };
-		32E2E7B52386BAE300C8E7CF /* ArticleScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32E2E7B42386BAE300C8E7CF /* ArticleScreenViewModel.swift */; };
 		32E2E7B72386D97000C8E7CF /* ApiError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32E2E7B62386D97000C8E7CF /* ApiError.swift */; };
 		32E2E7BA23872E2000C8E7CF /* NetworkDispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32E2E7B923872E2000C8E7CF /* NetworkDispatcher.swift */; };
 		32E2E7BC238750D500C8E7CF /* CacheableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32E2E7BB238750D500C8E7CF /* CacheableDataSource.swift */; };
@@ -128,7 +127,6 @@
 		32E2E7A82385ED7400C8E7CF /* ArticleTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ArticleTableViewCell.xib; sourceTree = "<group>"; };
 		32E2E7AB2385F20C00C8E7CF /* Reusable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reusable.swift; sourceTree = "<group>"; };
 		32E2E7AD2386A10100C8E7CF /* GetEverythingNewsRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetEverythingNewsRequest.swift; sourceTree = "<group>"; };
-		32E2E7B42386BAE300C8E7CF /* ArticleScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleScreenViewModel.swift; sourceTree = "<group>"; };
 		32E2E7B62386D97000C8E7CF /* ApiError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiError.swift; sourceTree = "<group>"; };
 		32E2E7B923872E2000C8E7CF /* NetworkDispatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkDispatcher.swift; sourceTree = "<group>"; };
 		32E2E7BB238750D500C8E7CF /* CacheableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheableDataSource.swift; sourceTree = "<group>"; };
@@ -335,7 +333,6 @@
 			isa = PBXGroup;
 			children = (
 				32E2E75C2385897300C8E7CF /* ArticleViewController.swift */,
-				32E2E7B42386BAE300C8E7CF /* ArticleScreenViewModel.swift */,
 			);
 			path = Article;
 			sourceTree = "<group>";
@@ -677,7 +674,6 @@
 				32E2E78323858D6800C8E7CF /* NetworkUtils.swift in Sources */,
 				32E2E7C42387F61C00C8E7CF /* CoreDataManager.swift in Sources */,
 				32E2E7C72387F7C500C8E7CF /* News.xcdatamodeld in Sources */,
-				32E2E7B52386BAE300C8E7CF /* ArticleScreenViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
