@@ -6,7 +6,7 @@
 //  Copyright © 2019 dpanchuk. All rights reserved.
 //
 
-import RxSwift
+import UIKit
 
 final class NewsFeedScreenCoordinator: BaseCoordinator {
     
@@ -14,7 +14,6 @@ final class NewsFeedScreenCoordinator: BaseCoordinator {
     var presenter: UINavigationController
     var childCoordinators: [Coordinator]
     var onFinish: (() -> Void)?
-    let disposeBag = DisposeBag()
     
     // MARK: Initializers
     init(presenter: UINavigationController) {
@@ -33,11 +32,10 @@ final class NewsFeedScreenCoordinator: BaseCoordinator {
         let feedVC = NewsFeedViewController.instantiate()
         let viewModel = NewsFeed.ViewModel()
         feedVC.viewModel = viewModel
-        
-        viewModel.showArticle
-            .subscribe(onNext: { [weak self] in self?.showArticleViewController(of: $0) })
-            .disposed(by: disposeBag)
-        
+        feedVC.onArticleSelect = { [weak self] article in
+            self?.showArticleViewController(of: article)
+        }
+
         return feedVC
     }
     

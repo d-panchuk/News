@@ -22,8 +22,11 @@ final class NewsFeedViewController: UIViewController, Storyboarded {
     private let refreshControl = UIRefreshControl()
     
     // MARK: Properties
-    var viewModel: NewsFeedViewModel!
+    var viewModel: NewsFeed.ViewModel!
+    var onArticleSelect: ((ArticleViewModel) -> Void)?
     
+    private var renderedProps: Props?
+    private let articlesSubject = BehaviorRelay<[ArticleViewModel]>(value: [])
     private let disposeBag = DisposeBag()
     
     // MARK: Lifecycle
@@ -46,57 +49,78 @@ final class NewsFeedViewController: UIViewController, Storyboarded {
             UINib(nibName: "ArticleTableViewCell", bundle: nil),
             forCellReuseIdentifier: ArticleTableViewCell.reuseIdentifier
         )
-    }
-    
-    private func initRefreshControl() {
-        refreshControl.sendActions(for: .valueChanged)
-        articlesTableView.insertSubview(refreshControl, at: 0)
-    }
-
-    private func initBindings() {        
-        bindViewModelToUI()
-        bindUIToViewModel()
-        
         articlesTableView.rx.willDisplayCell
             .subscribe(onNext: { UIView.animateAppearence(view: $0.cell, dx: -100) })
             .disposed(by: disposeBag)
-    }
-    
-    private func bindViewModelToUI() {
-        viewModel.articles
-            .do(onNext: { _ in self.refreshControl.endRefreshing() })
-            .drive(
-                articlesTableView.rx.items(
-                    cellIdentifier: ArticleTableViewCell.reuseIdentifier,
-                    cellType: ArticleTableViewCell.self)
+        
+        articlesSubject
+            .bind(to: articlesTableView.rx.items(
+                cellIdentifier: ArticleTableViewCell.reuseIdentifier,
+                cellType: ArticleTableViewCell.self)
             ) { (_, articleViewModel, cell) in
                 cell.configure(from: articleViewModel)
             }
             .disposed(by: disposeBag)
-        
-        viewModel.errorMessage
-            .throttle(.seconds(3))
-            .drive(onNext: { self.presentAlert(message: $0) })
-            .disposed(by: disposeBag)
     }
     
-    private func bindUIToViewModel() {
-        refreshControl.rx.controlEvent(.valueChanged)
-            .bind(to: viewModel.reloadTrigger)
-            .disposed(by: disposeBag)
-        
+    private func initRefreshControl() {
+        articlesTableView.insertSubview(refreshControl, at: 0)
+    }
+
+    private func initBindings() {        
         let articlesTableViewUpdate = articlesTableView.rx.contentOffset
             .throttle(.seconds(1), scheduler: MainScheduler.instance)
             .filter { _ in self.articlesTableView.isNearBottomEdge() }
             .flatMapLatest { _ in Observable.just(()) }
         
-        articlesTableViewUpdate
-            .bind(to: viewModel.nextPageTrigger)
+        let outputs = viewModel.makeOutputs(from:
+            NewsFeed.ViewModel.Inputs(
+                reloadTrigger: refreshControl.rx.controlEvent(.valueChanged).asObservable(),
+                nextPageTrigger: articlesTableViewUpdate,
+                selectArticleTrigger: articlesTableView.rx.modelSelected(ArticleViewModel.self).asObservable()
+            )
+        )
+        
+        outputs.props
+            .observeOn(MainScheduler.instance)
+            .subscribe(onNext: { [unowned self] in self.render(props: $0) })
             .disposed(by: disposeBag)
         
-        articlesTableView.rx.modelSelected(ArticleViewModel.self)
-            .bind(to: viewModel.selectArticleTrigger)
+        outputs.stateChanges
+            .subscribe()
             .disposed(by: disposeBag)
+        
+        outputs.route
+            .observeOn(MainScheduler.instance)
+            .subscribe(onNext: { [unowned self] route in
+                switch route {
+                case let .articleDetails(article):
+                    self.onArticleSelect?(article)
+                }
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func render(props: Props) {
+        if renderedProps?.articles != props.articles {
+            articlesSubject.accept(props.articles)
+        }
+        
+        if renderedProps?.isReloading != props.isReloading {
+            toggleRefreshControlLoading(to: props.isReloading)
+        }
+        
+        //.throttle(3)
+        if let errorMessage = props.errorMessage, renderedProps?.errorMessage != errorMessage {
+            //errorPresenter.present(error: error, on: self)
+            presentAlert(message: errorMessage)
+        }
+        
+        renderedProps = props
+    }
+    
+    private func toggleRefreshControlLoading(to state: Bool) {
+        state ? refreshControl.beginRefreshing() : refreshControl.endRefreshing()
     }
     
     private func presentAlert(message: String) {
