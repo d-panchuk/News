@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct ArticleViewModel {
+struct ArticleViewModel: Equatable {
     let author: String?
     let title: String
     let description: String?
@@ -17,7 +17,9 @@ struct ArticleViewModel {
     let publishedAt: String
     let content: String?
     let sourceName: String
-    
+}
+
+extension ArticleViewModel {
     init(from dtoModel: ArticleDTO) {
         author = dtoModel.author
         title = dtoModel.title
@@ -27,18 +29,5 @@ struct ArticleViewModel {
         content = dtoModel.content
         sourceName = dtoModel.source.name
         publishedAt = dtoModel.publishedAt
-    }
-}
-
-extension ArticleViewModel: Equatable {
-    static func == (lhs: ArticleViewModel, rhs: ArticleViewModel) -> Bool {
-        return lhs.author == rhs.author
-            && lhs.title == rhs.title
-            && lhs.description == rhs.description
-            && lhs.url == rhs.url
-            && lhs.urlToImage == rhs.urlToImage
-            && lhs.publishedAt == rhs.publishedAt
-            && lhs.content == rhs.content
-            && lhs.sourceName == rhs.sourceName
     }
 }
