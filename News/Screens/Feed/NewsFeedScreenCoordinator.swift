@@ -31,7 +31,7 @@ final class NewsFeedScreenCoordinator: BaseCoordinator {
     // MARK: Private methods
     private func makeFeedViewController() -> NewsFeedViewController {
         let feedVC = NewsFeedViewController.instantiate()
-        let viewModel = NewsFeedViewModel()
+        let viewModel = NewsFeed.ViewModel()
         feedVC.viewModel = viewModel
         
         viewModel.showArticle

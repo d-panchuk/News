@@ -11,6 +11,12 @@ import RxCocoa
 
 final class NewsFeedViewController: UIViewController, Storyboarded {
 
+    struct Props {
+        let articles: [ArticleViewModel]
+        let isReloading: Bool
+        let errorMessage: String?
+    }
+    
     // MARK: Outlets & UI elements
     @IBOutlet private weak var articlesTableView: UITableView!
     private let refreshControl = UIRefreshControl()
