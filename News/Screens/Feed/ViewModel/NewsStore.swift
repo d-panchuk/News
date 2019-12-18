@@ -24,7 +24,6 @@ extension NewsFeed {
         case nextPage
         case selectArticle(ArticleViewModel)
         
-        case loadArticles
         case loadArticlesSuccess([ArticleViewModel])
         case loadArticlesFailure(Error)
         
@@ -37,8 +36,6 @@ extension NewsFeed {
                 return "nextPage"
             case .selectArticle(_):
                 return "selectArticle"
-            case .loadArticles:
-                return "loadArticles"
             case .loadArticlesSuccess(_):
                 return "loadArticlesSuccess"
             case .loadArticlesFailure(_):
@@ -52,14 +49,13 @@ extension NewsFeed {
         
         switch action {
         case .nextPage:
+            newState.isLoading = true
             newState.page += 1
         
         case .reload:
+            newState.isLoading = true
             newState.articles = []
             newState.page = 1
-        
-        case .loadArticles:
-            newState.isLoading = true
         
         case .loadArticlesSuccess(let articles):
             newState.isLoading = false
@@ -69,7 +65,7 @@ extension NewsFeed {
             newState.isLoading = false
             newState.errorMessage = error.localizedDescription
         
-        default:
+        case .selectArticle:
             break
         }
         
