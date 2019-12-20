@@ -22,7 +22,7 @@ final class AppCoordinator: BaseCoordinator {
     }
     
     func start() {
-        let feedCoordinator = NewsFeedScreenCoordinator(presenter: presenter)
+        let feedCoordinator = NewsFeed.ScreenCoordinator(presenter: presenter)
         addDependency(feedCoordinator)
         feedCoordinator.start()
         
