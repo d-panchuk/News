@@ -40,4 +40,17 @@ extension NewsFeed {
         }
     }
     
+    static func infiniteScrollMiddleware() -> Store.Middleware {
+        return Store.makeMiddleware { dispatch, getState, next, action in
+            next(action)
+            
+            let state = getState()
+            guard case .isReachedBottom(let isReachedBottom) = action else { return }
+            
+            if isReachedBottom && !state.isLoading {
+                dispatch(.nextPage)
+            }
+        }
+    }
+    
 }

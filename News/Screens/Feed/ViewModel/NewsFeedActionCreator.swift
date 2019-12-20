@@ -12,9 +12,9 @@ extension NewsFeed {
     
     static func makeActions(from inputs: ViewModel.Inputs) -> Observable<Action> {
         return Observable.merge(
-            inputs.reloadTrigger.map { .reload },
-            inputs.nextPageTrigger.map { .nextPage },
-            inputs.selectArticleTrigger.map { .selectArticle($0) }
+            inputs.pullToRefresh.map { .reload },
+            inputs.contentOffsetChange.map { .isReachedBottom($0) },
+            inputs.articleSelect.map { .selectArticle($0) }
         )
     }
     

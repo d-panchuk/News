@@ -10,7 +10,7 @@ import RxSwift
 import RxCocoa
 
 final class NewsFeedViewController: UIViewController, Storyboarded {
-
+    
     struct Props {
         let articles: [ArticleViewModel]
         let isReloading: Bool
@@ -55,7 +55,8 @@ final class NewsFeedViewController: UIViewController, Storyboarded {
             .disposed(by: disposeBag)
         
         articlesSubject
-            .bind(to: articlesTableView.rx.items(
+            .asDriver()
+            .drive(articlesTableView.rx.items(
                 cellIdentifier: ArticleTableViewCell.reuseIdentifier,
                 cellType: ArticleTableViewCell.self)
             ) { (_, articleViewModel, cell) in
@@ -68,18 +69,17 @@ final class NewsFeedViewController: UIViewController, Storyboarded {
     private func initRefreshControl() {
         articlesTableView.insertSubview(refreshControl, at: 0)
     }
-
+    
     private func initBindings() {        
         let articlesTableViewUpdate = articlesTableView.rx.contentOffset
-            .throttle(.seconds(1), scheduler: MainScheduler.instance)
-            .filter { _ in self.articlesTableView.isNearBottomEdge() }
-            .flatMapLatest { _ in Observable.just(()) }
+            .map { [unowned self] _ in self.articlesTableView.isNearBottomEdge() }
+            .distinctUntilChanged()
         
         let outputs = viewModel.makeOutputs(from:
             NewsFeed.ViewModel.Inputs(
-                reloadTrigger: refreshControl.rx.controlEvent(.valueChanged).asObservable(),
-                nextPageTrigger: articlesTableViewUpdate,
-                selectArticleTrigger: articlesTableView.rx.modelSelected(ArticleViewModel.self).asObservable()
+                pullToRefresh: refreshControl.rx.controlEvent(.valueChanged).asObservable(),
+                contentOffsetChange: articlesTableViewUpdate,
+                articleSelect: articlesTableView.rx.modelSelected(ArticleViewModel.self).asObservable()
             )
         )
         

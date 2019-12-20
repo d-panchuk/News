@@ -15,11 +15,11 @@ extension NewsFeed {
     }
     
     class ViewModel {
-        
+                
         struct Inputs {
-            let reloadTrigger: Observable<Void>
-            let nextPageTrigger: Observable<Void>
-            let selectArticleTrigger: Observable<ArticleViewModel>
+            let pullToRefresh: Observable<Void>
+            let contentOffsetChange: Observable<Bool>
+            let articleSelect: Observable<ArticleViewModel>
         }
         
         struct Outputs {
@@ -33,19 +33,20 @@ extension NewsFeed {
             let store = Store(
                 initialState: initialState,
                 reducer: reduce,
-                middlewares: [loadMiddleware()]
+                middlewares: [loadMiddleware(), infiniteScrollMiddleware()]
             )
             
             let actions = makeActions(from: inputs)
             
             let props = store.state
+                .distinctUntilChanged()
                 .map(makeProps)
             
             let stateChanges = actions
                 .do(onNext: store.dispatch)
                 .map { _ in Void() }
             
-            let route = inputs.selectArticleTrigger
+            let route = inputs.articleSelect
                 .map(Route.articleDetails)
             
             return Outputs(props: props, stateChanges: stateChanges, route: route)

@@ -6,13 +6,13 @@
 //  Copyright © 2019 dpanchuk. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 extension NewsFeed {
     
     typealias Store = ReduxStore<State, Action>
     
-    struct State {
+    struct State: Equatable {
         var page: Int
         var totalResults: Int?
         var articles: [ArticleViewModel]
@@ -24,6 +24,7 @@ extension NewsFeed {
         case reload
         case nextPage
         case selectArticle(ArticleViewModel)
+        case isReachedBottom(Bool)
         
         case loadArticlesSuccess(PagedArticlesDTO)
         case loadArticlesFailure(Error)
@@ -66,9 +67,10 @@ extension NewsFeed {
         case .loadArticlesFailure(let error):
             newState.isLoading = false
             newState.errorMessage = error.localizedDescription
-        
-        case .selectArticle:
+
+        case .selectArticle, .isReachedBottom:
             break
+            
         }
         
         return newState
