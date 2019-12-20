@@ -29,20 +29,10 @@ extension NewsFeed {
         case loadArticlesSuccess(PagedArticlesDTO)
         case loadArticlesFailure(Error)
         
-        // FIXME: for debugging
         var description: String {
-            switch self {
-            case .reload:
-                return "reload"
-            case .nextPage:
-                return "nextPage"
-            case .selectArticle(_):
-                return "selectArticle"
-            case .loadArticlesSuccess(_):
-                return "loadArticlesSuccess"
-            case .loadArticlesFailure(_):
-                return "loadArticlesFailure"
-            }
+            let fullDescription = String.init(describing: self)
+            let lastIndex = fullDescription.firstIndex(of: "(") ?? fullDescription.endIndex
+            return String(fullDescription.prefix(upTo: lastIndex))
         }
     }
     
