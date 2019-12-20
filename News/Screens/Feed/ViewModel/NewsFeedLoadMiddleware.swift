@@ -15,6 +15,9 @@ extension NewsFeed {
         return Store.makeMiddleware { dispatch, getState, next, action in
             print("middleware call with action \(action.description)")
             
+            let oldState = getState()
+            if let totalResults = oldState.totalResults, oldState.articles.count >= totalResults { return }
+            
             next(action)
             
             let state = getState()
@@ -24,7 +27,6 @@ extension NewsFeed {
                 let query = "bitcoin" // FIXME
                 print("middleware get news at page \(state.page)")
                 dataSource.getEverythingNews(query: query, page: state.page)
-                    .map { pagedArticles in pagedArticles.articles.map { ArticleViewModel(from: $0) } }
                     .subscribe(
                         onSuccess: { dispatch(.loadArticlesSuccess($0)) },
                         onError: { dispatch(.loadArticlesFailure($0)) }

@@ -29,7 +29,7 @@ extension NewsFeed {
         }
         
         func makeOutputs(from inputs: Inputs) -> Outputs {
-            let initialState = State(page: 0, articles: [], isLoading: true, errorMessage: nil)
+            let initialState = State(page: 0, totalResults: nil, articles: [], isLoading: false, errorMessage: nil)
             let store = Store(
                 initialState: initialState,
                 reducer: reduce,

@@ -14,6 +14,7 @@ extension NewsFeed {
     
     struct State {
         var page: Int
+        var totalResults: Int?
         var articles: [ArticleViewModel]
         var isLoading: Bool
         var errorMessage: String?
@@ -24,7 +25,7 @@ extension NewsFeed {
         case nextPage
         case selectArticle(ArticleViewModel)
         
-        case loadArticlesSuccess([ArticleViewModel])
+        case loadArticlesSuccess(PagedArticlesDTO)
         case loadArticlesFailure(Error)
         
         // FIXME: for debugging
@@ -57,9 +58,10 @@ extension NewsFeed {
             newState.articles = []
             newState.page = 1
         
-        case .loadArticlesSuccess(let articles):
+        case .loadArticlesSuccess(let articlesDto):
             newState.isLoading = false
-            newState.articles += articles
+            newState.totalResults = articlesDto.totalResults
+            newState.articles += articlesDto.articles.map { ArticleViewModel(from: $0) }
         
         case .loadArticlesFailure(let error):
             newState.isLoading = false
