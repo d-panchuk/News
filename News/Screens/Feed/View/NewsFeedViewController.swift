@@ -26,6 +26,7 @@ final class NewsFeedViewController: UIViewController, Storyboarded {
     var onArticleSelect: ((ArticleViewModel) -> Void)?
     
     private var renderedProps: Props?
+    private let errorPresenter = ErrorPresenter()
     private let articlesSubject = BehaviorRelay<[ArticleViewModel]>(value: [])
     private let disposeBag = DisposeBag()
     
@@ -111,9 +112,8 @@ final class NewsFeedViewController: UIViewController, Storyboarded {
             toggleRefreshControlLoading(to: props.isReloading)
         }
         
-        //.throttle(3)
         if let errorMessage = props.errorMessage, renderedProps?.errorMessage != errorMessage {
-            presentAlert(message: errorMessage)
+            errorPresenter.present(error: errorMessage, on: self)
         }
         
         renderedProps = props
@@ -121,12 +121,6 @@ final class NewsFeedViewController: UIViewController, Storyboarded {
     
     private func toggleRefreshControlLoading(to state: Bool) {
         state ? refreshControl.beginRefreshing() : refreshControl.endRefreshing()
-    }
-    
-    private func presentAlert(message: String) {
-        let alertController = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alertController, animated: true)
     }
     
 }
