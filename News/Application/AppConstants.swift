@@ -12,7 +12,7 @@ struct AppConstants {
     
     struct Network {
         static let newsApiBasePath = "https://newsapi.org/v2"
-        static let newsApiKey = "14a2cd8a9a4a4d30b114dfb5f290c3cb"
+        static let newsApiKey = "fb2467622a4942f59a2576615f8e3959"
         static let pageSize = 20
         static let dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
     }
