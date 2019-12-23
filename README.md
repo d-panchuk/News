@@ -6,7 +6,7 @@ Note: it's possible to discover only 100 news per session since api key of free 
 ## How to run
 
 1. Run `pod install` in terminal from project directory.
-2. Open `News.xcworkspace` in Xcode 10.
+2. Open `News.xcworkspace` in Xcode.
 3. Run project.
 
 ## Screens
@@ -42,11 +42,10 @@ DataSource details:
 ## Other
 
 Tools used: Xcode 11, Swift 5.
-Third-party dependencies: RxSwift, RxCocoa, RxTest Kingfisher.
+Third-party dependencies: RxSwift, RxCocoa, RxTest, Kingfisher.
 
 ## Todo
 
 * Unit-tests
 * Fix reentrancy anomaly during offline mode list updating
-* Stop updating list when it's not needed (limit error occurred / final capacity of articles is reached)
 * Embed Article view components into ScrollView to support landscape orientation 
