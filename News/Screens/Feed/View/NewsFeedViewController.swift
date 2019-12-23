@@ -84,7 +84,7 @@ final class NewsFeedViewController: UIViewController, Storyboarded {
         )
         
         outputs.props
-            .observeOn(MainScheduler.instance)
+            .observeOn(MainScheduler.instance) // asyncInstance to fix reentrancy bug
             .subscribe(onNext: { [unowned self] in self.render(props: $0) })
             .disposed(by: disposeBag)
         

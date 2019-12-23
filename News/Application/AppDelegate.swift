@@ -44,7 +44,7 @@ private extension AppDelegate {
         _ = Observable<Int>
             .interval(.seconds(1), scheduler: MainScheduler.instance)
             .subscribe { _ in
-                print("RxSwift resources count: \(RxSwift.Resources.total).")
+//                print("RxSwift resources count: \(RxSwift.Resources.total).")
         }
     }
     

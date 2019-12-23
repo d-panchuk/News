@@ -25,7 +25,9 @@ extension NewsFeed {
             switch action {
             case .nextPage, .reload:
                 let query = "bitcoin" // FIXME
+                
                 print("middleware get news at page \(state.page)")
+                
                 dataSource.getEverythingNews(query: query, page: state.page)
                     .subscribe(
                         onSuccess: { dispatch(.loadArticlesSuccess($0)) },
@@ -44,9 +46,9 @@ extension NewsFeed {
         return Store.makeMiddleware { dispatch, getState, next, action in
             next(action)
             
-            let state = getState()
             guard case .isReachedBottom(let isReachedBottom) = action else { return }
-            
+
+            let state = getState()
             if isReachedBottom && !state.isLoading {
                 dispatch(.nextPage)
             }
