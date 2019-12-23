@@ -10,6 +10,15 @@ import UIKit
 
 final class ArticleViewController: UIViewController, Storyboarded {
 
+    struct Props {
+        let title: String
+        let imageUrlPath: String?
+        let source: String
+        let publishTime: String
+        let content: String
+        let linkURL: URL?
+    }
+    
     // MARK: Outlets
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var imageView: UIImageView!
@@ -19,27 +28,27 @@ final class ArticleViewController: UIViewController, Storyboarded {
     @IBOutlet private weak var readMoreButton: UIButton!
     
     // MARK: Properties
-    var viewModel: ArticleScreenViewModel!
+    private var renderedProps: Props?
     
     // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setup()
-        updateUI()
     }
     
     // MARK: Actions
     @IBAction private func readMoreButtonTapped(sender: UIButton) {
-        guard let url = viewModel.linkURL else { return }
+        guard let url = renderedProps?.linkURL else { return }
         if UIApplication.shared.canOpenURL(url) {
             UIApplication.shared.open(url)
         }
     }
     
     @objc private func shareButtonTapped(sender: AnyObject) {
+        guard let linkURL = renderedProps?.linkURL else { return }
         let activityViewController = UIActivityViewController(
-            activityItems: [viewModel.linkURL as Any], applicationActivities: nil
+            activityItems: [linkURL], applicationActivities: nil
         )
         present(activityViewController, animated: true)
     }
@@ -58,12 +67,15 @@ final class ArticleViewController: UIViewController, Storyboarded {
         )
     }
     
-    private func updateUI() {
-        titleLabel.text = viewModel.title
-        imageView.setImage(from: viewModel.imageUrlPath)
-        sourceLabel.text = viewModel.source
-        publishTimeLabel.text = viewModel.publishTime
-        contentLabel.text = viewModel.content
+    // MARK: Public methods
+    func renderProps(_ props: Props) {
+        titleLabel.text = props.title
+        imageView.setImage(from: props.imageUrlPath)
+        sourceLabel.text = props.source
+        publishTimeLabel.text = props.publishTime
+        contentLabel.text = props.content
+        
+        renderedProps = props
     }
     
 }
