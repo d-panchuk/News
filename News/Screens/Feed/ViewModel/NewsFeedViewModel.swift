@@ -7,6 +7,7 @@
 //
 
 import RxSwift
+import Combine
 
 extension NewsFeed {
     
@@ -23,7 +24,7 @@ extension NewsFeed {
         }
         
         struct Outputs {
-            let props: Observable<NewsFeedViewController.Props>
+            let props: AnyPublisher<NewsFeedViewController.Props, Never>
             let stateChanges: Observable<Void>
             let route: Observable<Route>
         }
@@ -39,8 +40,9 @@ extension NewsFeed {
             let actions = makeActions(from: inputs)
             
             let props = store.state
-                .distinctUntilChanged()
+                .removeDuplicates()
                 .map(makeProps)
+                .eraseToAnyPublisher()
             
             let stateChanges = actions
                 .do(onNext: store.dispatch)

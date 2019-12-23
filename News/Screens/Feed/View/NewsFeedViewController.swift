@@ -8,6 +8,7 @@
 
 import RxSwift
 import RxCocoa
+import Combine
 
 final class NewsFeedViewController: UIViewController, Storyboarded {
     
@@ -29,6 +30,7 @@ final class NewsFeedViewController: UIViewController, Storyboarded {
     private let errorPresenter = ErrorPresenter()
     private let articlesSubject = BehaviorRelay<[ArticleViewModel]>(value: [])
     private let disposeBag = DisposeBag()
+    private var cancellables = Set<AnyCancellable>()
     
     // MARK: Lifecycle
     override func viewDidLoad() {
@@ -82,11 +84,11 @@ final class NewsFeedViewController: UIViewController, Storyboarded {
                 articleSelect: articlesTableView.rx.modelSelected(ArticleViewModel.self).asObservable()
             )
         )
-        
+
         outputs.props
-            .observeOn(MainScheduler.instance) // asyncInstance to fix reentrancy bug
-            .subscribe(onNext: { [unowned self] in self.render(props: $0) })
-            .disposed(by: disposeBag)
+            .receive(on: RunLoop.main) // asyncInstance to fix reentrancy bug
+            .sink(receiveValue: { [unowned self] in self.render(props: $0) })
+            .store(in: &cancellables)
         
         outputs.stateChanges
             .subscribe()
