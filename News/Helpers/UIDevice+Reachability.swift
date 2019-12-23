@@ -6,7 +6,6 @@
 //  Copyright © 2019 dpanchuk. All rights reserved.
 //
 
-
 import UIKit
 import SystemConfiguration
 

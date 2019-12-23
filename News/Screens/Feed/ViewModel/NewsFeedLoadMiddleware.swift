@@ -6,12 +6,12 @@
 //  Copyright © 2019 dpanchuk. All rights reserved.
 //
 
-import RxSwift
+import Combine
  
 extension NewsFeed {
     
     static func loadMiddleware(dataSource: DataSource = CacheableDataSource()) -> Store.Middleware {
-        let disposeBag = DisposeBag()
+        var cancellables = Set<AnyCancellable>()
         return Store.makeMiddleware { dispatch, getState, next, action in
             print("middleware call with action \(action.description)")
             
@@ -29,11 +29,15 @@ extension NewsFeed {
                 print("middleware get news at page \(state.page)")
                 
                 dataSource.getEverythingNews(query: query, page: state.page)
-                    .subscribe(
-                        onSuccess: { dispatch(.loadArticlesSuccess($0)) },
-                        onError: { dispatch(.loadArticlesFailure($0)) }
+                    .sink(
+                        receiveCompletion: { completion in
+                            if case .failure(let error) = completion {
+                                dispatch(.loadArticlesFailure(error))
+                            }
+                        },
+                        receiveValue: { dispatch(.loadArticlesSuccess($0)) }
                     )
-                    .disposed(by: disposeBag)
+                    .store(in: &cancellables)
             
             default:
                 return

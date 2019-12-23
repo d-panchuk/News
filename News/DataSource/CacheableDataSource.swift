@@ -6,7 +6,8 @@
 //  Copyright © 2019 dpanchuk. All rights reserved.
 //
 
-import RxSwift
+import UIKit
+import Combine
 
 struct CacheableDataSource: DataSource {
     
@@ -21,14 +22,15 @@ struct CacheableDataSource: DataSource {
         self.localDataSource = localDataSource
     }
     
-    func getEverythingNews(query: String, page: Int) -> Single<PagedArticlesDTO> {
-        let pagedArticles: Single<PagedArticlesDTO>
+    func getEverythingNews(query: String, page: Int) -> AnyPublisher<PagedArticlesDTO, NetworkError> {
+        let pagedArticles: AnyPublisher<PagedArticlesDTO, NetworkError>
 
         if UIDevice.isConnectedToNetwork {
             pagedArticles = remoteDataSource.getEverythingNews(query: query, page: page)
-                .do(onSuccess: { pagedArticles in
+                .handleEvents(receiveOutput: { pagedArticles in
                     self.localDataSource.saveArticles(pagedArticles.articles, for: query, page: page)
                 })
+            .eraseToAnyPublisher()
         } else {
             pagedArticles = localDataSource.getEverythingNews(query: query, page: page)
         }

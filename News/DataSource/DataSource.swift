@@ -6,8 +6,8 @@
 //  Copyright © 2019 dpanchuk. All rights reserved.
 //
 
-import RxSwift
+import Combine
 
 protocol DataSource {
-    func getEverythingNews(query: String, page: Int) -> Single<PagedArticlesDTO>
+    func getEverythingNews(query: String, page: Int) -> AnyPublisher<PagedArticlesDTO, NetworkError>
 }
