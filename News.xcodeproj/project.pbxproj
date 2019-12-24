@@ -501,7 +501,6 @@
 				321D8549238577AC00EC4FC2 /* Sources */,
 				321D854A238577AC00EC4FC2 /* Frameworks */,
 				321D854B238577AC00EC4FC2 /* Resources */,
-				33EE62DA6449F88A44358A63 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -573,23 +572,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		33EE62DA6449F88A44358A63 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-NewsTests/Pods-NewsTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-NewsTests/Pods-NewsTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NewsTests/Pods-NewsTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		4C790BB4CB8CE241DF906937 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
