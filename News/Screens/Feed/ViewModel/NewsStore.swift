@@ -23,7 +23,7 @@ extension NewsFeed {
     enum Action {
         case reload
         case nextPage
-        case selectArticle(ArticleViewModel)
+        case selectArticle(Int)
         case isReachedBottom(Bool)
         
         case loadArticlesSuccess(PagedArticlesDTO)

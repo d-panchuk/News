@@ -6,16 +6,16 @@
 //  Copyright © 2019 dpanchuk. All rights reserved.
 //
 
-import RxSwift
+import Combine
 
 extension NewsFeed {
     
-    static func makeActions(from inputs: ViewModel.Inputs) -> Observable<Action> {
-        return Observable.merge(
+    static func makeActions(from inputs: ViewModel.Inputs) -> AnyPublisher<Action, Never> {
+        return Publishers.Merge3(
             inputs.pullToRefresh.map { .reload },
             inputs.contentOffsetChange.map { .isReachedBottom($0) },
             inputs.articleSelect.map { .selectArticle($0) }
-        )
+        ).eraseToAnyPublisher()
     }
     
 }
