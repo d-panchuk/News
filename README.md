@@ -19,7 +19,7 @@ Implemented features: pull to refresh, pagination, offline mode, alerts on netwo
 ## Architecture
 
 * MVVM as the main design pattern
-* RxSwift & RxCocoa for binding between View and ViewModel layers
+* Combine for binding between View and ViewModel layers
 * Coordinators to separate navigation logic from View and ViewModel layers
 * CoreData for data persistence
 * Network layer with the ability to flexibly change implementations
@@ -42,10 +42,9 @@ DataSource details:
 ## Other
 
 Tools used: Xcode 11, Swift 5.
-Third-party dependencies: RxSwift, RxCocoa, RxTest, Kingfisher.
+Third-party dependencies: Kingfisher.
 
 ## Todo
 
 * Unit-tests
-* Fix reentrancy anomaly during offline mode list updating
 * Embed Article view components into ScrollView to support landscape orientation 
