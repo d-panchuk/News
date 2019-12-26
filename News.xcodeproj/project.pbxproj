@@ -15,6 +15,8 @@
 		321D8552238577AC00EC4FC2 /* NewsFeedViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 321D8551238577AC00EC4FC2 /* NewsFeedViewModelTests.swift */; };
 		321D85622385855700EC4FC2 /* DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 321D85612385855700EC4FC2 /* DataSource.swift */; };
 		321D85652385859000EC4FC2 /* RemoteDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 321D85642385859000EC4FC2 /* RemoteDataSource.swift */; };
+		3228C25C23B4C4A4002521C8 /* Paginator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3228C25923B4C495002521C8 /* Paginator.framework */; };
+		3228C25D23B4C4A4002521C8 /* Paginator.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3228C25923B4C495002521C8 /* Paginator.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3238EF7C23B2368F0072F788 /* UIControlSubscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3238EF7B23B2368F0072F788 /* UIControlSubscription.swift */; };
 		3238EF8023B236FC0072F788 /* UIControlPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3238EF7F23B236FC0072F788 /* UIControlPublisher.swift */; };
 		3238EF8223B237360072F788 /* CombineCompatible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3238EF8123B237360072F788 /* CombineCompatible.swift */; };
@@ -78,7 +80,35 @@
 			remoteGlobalIDString = 321D8538238577A900EC4FC2;
 			remoteInfo = News;
 		};
+		3228C25823B4C495002521C8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3228C24C23B4C495002521C8 /* Paginator.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3228C22F23B4C38C002521C8;
+			remoteInfo = Paginator;
+		};
+		3228C25A23B4C495002521C8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3228C24C23B4C495002521C8 /* Paginator.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3228C23823B4C38C002521C8;
+			remoteInfo = PaginatorTests;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		3228C25E23B4C4A4002521C8 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				3228C25D23B4C4A4002521C8 /* Paginator.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		069A90F7166A6152F3478285 /* Pods_News.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_News.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -94,6 +124,12 @@
 		321D8553238577AC00EC4FC2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		321D85612385855700EC4FC2 /* DataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSource.swift; sourceTree = "<group>"; };
 		321D85642385859000EC4FC2 /* RemoteDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteDataSource.swift; sourceTree = "<group>"; };
+		3228C24C23B4C495002521C8 /* Paginator.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Paginator.xcodeproj; sourceTree = "<group>"; };
+		3228C25023B4C495002521C8 /* Paginator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paginator.swift; sourceTree = "<group>"; };
+		3228C25123B4C495002521C8 /* Paginator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Paginator.h; sourceTree = "<group>"; };
+		3228C25223B4C495002521C8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3228C25423B4C495002521C8 /* PaginatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaginatorTests.swift; sourceTree = "<group>"; };
+		3228C25523B4C495002521C8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3238EF7B23B2368F0072F788 /* UIControlSubscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIControlSubscription.swift; sourceTree = "<group>"; };
 		3238EF7F23B236FC0072F788 /* UIControlPublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIControlPublisher.swift; sourceTree = "<group>"; };
 		3238EF8123B237360072F788 /* CombineCompatible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombineCompatible.swift; sourceTree = "<group>"; };
@@ -157,6 +193,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3228C25C23B4C4A4002521C8 /* Paginator.framework in Frameworks */,
 				1700951E5F63DC0B0533023D /* Pods_News.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -175,6 +212,7 @@
 		1E36F2D6627D226AD6F440BB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3228C24B23B4C495002521C8 /* Paginator */,
 				069A90F7166A6152F3478285 /* Pods_News.framework */,
 				657059988905D77DCA12EB6C /* Pods_NewsTests.framework */,
 			);
@@ -286,6 +324,45 @@
 				32E2E7BB238750D500C8E7CF /* CacheableDataSource.swift */,
 			);
 			path = DataSource;
+			sourceTree = "<group>";
+		};
+		3228C24B23B4C495002521C8 /* Paginator */ = {
+			isa = PBXGroup;
+			children = (
+				3228C24C23B4C495002521C8 /* Paginator.xcodeproj */,
+				3228C24F23B4C495002521C8 /* Paginator */,
+				3228C25323B4C495002521C8 /* PaginatorTests */,
+			);
+			name = Paginator;
+			path = ../Paginator;
+			sourceTree = "<group>";
+		};
+		3228C24D23B4C495002521C8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3228C25923B4C495002521C8 /* Paginator.framework */,
+				3228C25B23B4C495002521C8 /* PaginatorTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3228C24F23B4C495002521C8 /* Paginator */ = {
+			isa = PBXGroup;
+			children = (
+				3228C25023B4C495002521C8 /* Paginator.swift */,
+				3228C25123B4C495002521C8 /* Paginator.h */,
+				3228C25223B4C495002521C8 /* Info.plist */,
+			);
+			path = Paginator;
+			sourceTree = "<group>";
+		};
+		3228C25323B4C495002521C8 /* PaginatorTests */ = {
+			isa = PBXGroup;
+			children = (
+				3228C25423B4C495002521C8 /* PaginatorTests.swift */,
+				3228C25523B4C495002521C8 /* Info.plist */,
+			);
+			path = PaginatorTests;
 			sourceTree = "<group>";
 		};
 		3238EF7D23B236BE0072F788 /* UI */ = {
@@ -483,6 +560,7 @@
 				321D8536238577A900EC4FC2 /* Frameworks */,
 				321D8537238577A900EC4FC2 /* Resources */,
 				4C790BB4CB8CE241DF906937 /* [CP] Embed Pods Frameworks */,
+				3228C25E23B4C4A4002521C8 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -542,6 +620,12 @@
 			mainGroup = 321D8530238577A800EC4FC2;
 			productRefGroup = 321D853A238577A900EC4FC2 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 3228C24D23B4C495002521C8 /* Products */;
+					ProjectRef = 3228C24C23B4C495002521C8 /* Paginator.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				321D8538238577A900EC4FC2 /* News */,
@@ -549,6 +633,23 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		3228C25923B4C495002521C8 /* Paginator.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Paginator.framework;
+			remoteRef = 3228C25823B4C495002521C8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3228C25B23B4C495002521C8 /* PaginatorTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = PaginatorTests.xctest;
+			remoteRef = 3228C25A23B4C495002521C8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		321D8537238577A900EC4FC2 /* Resources */ = {

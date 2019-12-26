@@ -13,8 +13,6 @@ extension NewsFeed {
     typealias Store = ReduxStore<State, Action>
     
     struct State: Equatable {
-        var page: Int
-        var totalResults: Int?
         var articles: [ArticleViewModel]
         var isLoading: Bool
         var errorMessage: String?
@@ -26,7 +24,7 @@ extension NewsFeed {
         case selectArticle(Int)
         case isReachedBottom(Bool)
         
-        case loadArticlesSuccess(PagedArticlesDTO)
+        case loadArticlesSuccess([ArticleDTO])
         case loadArticlesFailure(Error)
         
         var description: String {
@@ -42,17 +40,14 @@ extension NewsFeed {
         switch action {
         case .nextPage:
             newState.isLoading = true
-            newState.page += 1
         
         case .reload:
             newState.isLoading = true
             newState.articles = []
-            newState.page = 1
         
-        case .loadArticlesSuccess(let articlesDto):
+        case .loadArticlesSuccess(let articles):
             newState.isLoading = false
-            newState.totalResults = articlesDto.totalResults
-            newState.articles += articlesDto.articles.map { ArticleViewModel(from: $0) }
+            newState.articles += articles.map { ArticleViewModel(from: $0) }
         
         case .loadArticlesFailure(let error):
             newState.isLoading = false

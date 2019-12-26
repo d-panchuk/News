@@ -7,37 +7,54 @@
 //
 
 import Combine
- 
+import Paginator
+
 extension NewsFeed {
     
-    static func loadMiddleware(dataSource: DataSource = CacheableDataSource()) -> Store.Middleware {
+    private static var paginator: Paginator<ArticleDTO, NetworkError> {
+        Paginator<ArticleDTO, NetworkError>(
+            pageSize: AppConstants.Network.pageSize,
+            fetchHandler: { _ in },
+            resultsHandler: { _ in }
+        )
+    }
+    
+    static func makeNewsFetcherMiddleware(
+        dataSource: DataSource = CacheableDataSource(),
+        paginator: Paginator<ArticleDTO, NetworkError> = paginator
+    ) -> Store.Middleware {
+        
         var cancellables = Set<AnyCancellable>()
+        
         return Store.makeMiddleware { dispatch, getState, next, action in
             print("middleware call with action \(action.description)")
             
-            let oldState = getState()
-            if let totalResults = oldState.totalResults, oldState.articles.count >= totalResults { return }
-            
             next(action)
             
-            let state = getState()
-            
-            switch action {
-            case .nextPage, .reload:
+            paginator.fetchHandler = { page in
                 let query = "bitcoin" // FIXME
-                
-                print("middleware get news at page \(state.page)")
-                
-                dataSource.getEverythingNews(query: query, page: state.page)
+                dataSource.getEverythingNews(query: query, page: page)
                     .sink(
                         receiveCompletion: { completion in
                             if case .failure(let error) = completion {
-                                dispatch(.loadArticlesFailure(error))
+                                paginator.failed(error: error)
                             }
-                        },
-                        receiveValue: { dispatch(.loadArticlesSuccess($0)) }
+                    },
+                        receiveValue: {
+                            paginator.received(results: $0.articles, total: $0.totalResults)
+                        }
                     )
                     .store(in: &cancellables)
+            }
+            paginator.resultsHandler = { dispatch(.loadArticlesSuccess($0)) }
+            paginator.failureHandler = { dispatch(.loadArticlesFailure($0)) }
+            
+            switch action {
+            case .nextPage:
+                paginator.fetchNextPage()
+            
+            case .reload:
+                paginator.fetchFirstPage()
             
             default:
                 return
@@ -46,12 +63,12 @@ extension NewsFeed {
         }
     }
     
-    static func infiniteScrollMiddleware() -> Store.Middleware {
+    static func makeInfiniteScrollMiddleware() -> Store.Middleware {
         return Store.makeMiddleware { dispatch, getState, next, action in
             next(action)
             
             guard case .isReachedBottom(let isReachedBottom) = action else { return }
-
+            
             let state = getState()
             if isReachedBottom && !state.isLoading {
                 dispatch(.nextPage)
