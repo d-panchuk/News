@@ -6,8 +6,7 @@
 //  Copyright © 2018 Arthur Mironenko. All rights reserved.
 //
 
-import RxSwift
-import RxCocoa
+import Combine
 
 final class ReduxStore<State, Action> {
     
@@ -16,8 +15,8 @@ final class ReduxStore<State, Action> {
     typealias StateProvider = () -> State
     typealias Middleware = (@escaping Dispatch, @escaping StateProvider) -> (@escaping Dispatch) -> Dispatch
     
-    let state: Observable<State>
-    private let stateRelay: BehaviorRelay<State>
+    let state: AnyPublisher<State, Never>
+    private let stateSubject: CurrentValueSubject<State, Never>
     private let reducer: Reducer
     private var dispatchFunction: Dispatch!
     
@@ -26,20 +25,20 @@ final class ReduxStore<State, Action> {
         reducer: @escaping Reducer,
         middlewares: [Middleware]
     ) {
-        let stateRelay = BehaviorRelay(value: initialState)
+        let stateSubject = CurrentValueSubject<State, Never>(initialState)
         let defaultDispatch: Dispatch = { action in
-            let newState = reducer(stateRelay.value, action)
-            stateRelay.accept(newState)
+            let newState = reducer(stateSubject.value, action)
+            stateSubject.send(newState)
         }
         
-        self.stateRelay = stateRelay
-        self.state = stateRelay.asObservable()
+        self.stateSubject = stateSubject
+        self.state = stateSubject.eraseToAnyPublisher()
         self.reducer = reducer
         self.dispatchFunction = middlewares
             .reversed()
             .reduce(defaultDispatch) { (dispatchFunction, middleware) -> Dispatch in
                 let dispatch: Dispatch = { [weak self] in self?.dispatch(action: $0) }
-                let getState: StateProvider = { stateRelay.value }
+                let getState: StateProvider = { stateSubject.value }
                 return middleware(dispatch, getState)(dispatchFunction)
         }
     }
@@ -49,7 +48,7 @@ final class ReduxStore<State, Action> {
     }
     
     func getState() -> State {
-        return stateRelay.value
+        return stateSubject.value
     }
     
     static func makeMiddleware(worker: @escaping (@escaping Dispatch, StateProvider, Dispatch, Action) -> Void) -> Middleware {

@@ -7,21 +7,21 @@
 //
 
 import UIKit
-import RxSwift
+import Combine
 
 final class ErrorPresenter {
     private let alertController = UIAlertController(title: "", message: "", preferredStyle: .alert)
     private var presentedError: String?
     
-    var dismissed: Observable<Void>
+    var dismissed: AnyPublisher<Void, Never>
     
     init() {
-        let dismissSubject = PublishSubject<Void>()
+        let dismissSubject = PassthroughSubject<Void, Never>()
         
-        self.dismissed = dismissSubject.asObservable()
+        self.dismissed = dismissSubject.eraseToAnyPublisher()
         
         let okAction = UIAlertAction(title: "OK", style: .default) { [weak self] _ in
-            dismissSubject.onNext(Void())
+            dismissSubject.send(Void())
             self?.presentedError = nil
         }
         

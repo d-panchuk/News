@@ -6,7 +6,7 @@
 //  Copyright © 2019 dpanchuk. All rights reserved.
 //
 
-import RxSwift
+import Combine
 
 struct LocalDataSource: DataSource {
     
@@ -23,11 +23,14 @@ struct LocalDataSource: DataSource {
         newsPersistenceManager.saveArticleIds(articleIds, for: query, page: page)
     }
     
-    func getEverythingNews(query: String, page: Int) -> Single<PagedArticlesDTO> {
+    func getEverythingNews(query: String, page: Int) -> AnyPublisher<PagedArticlesDTO, NetworkError> {
         let articles = newsPersistenceManager.getArticles(for: query, page: page).compactMap { ArticleDTO(from: $0) }
         let totalResults = newsPersistenceManager.getTotalResults(for: query)
         let pagedResponse = PagedArticlesDTO(status: "OK", totalResults: totalResults, articles: articles)
-        return .just(pagedResponse)
+        
+        return Future<PagedArticlesDTO, NetworkError> { promise in
+            promise(.success(pagedResponse))
+        }.eraseToAnyPublisher()
     }
     
 }

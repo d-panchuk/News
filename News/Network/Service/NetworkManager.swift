@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import RxSwift
+import Combine
 
 struct NetworkManager {
     
@@ -39,19 +39,20 @@ struct NetworkManager {
         )
     }
     
-    func execute<ResponseType: Codable>(request: RequestType) -> Single<ResponseType> {
-        return Single<ResponseType>.create { single in
+    func execute<ResponseType: Codable>(request: RequestType) -> AnyPublisher<ResponseType, NetworkError> {
+        return Future<ResponseType, NetworkError> { promise in
             let task = self.execute(
                 request: request,
                 onSuccess: { response in
-                    single(.success(response))
+                    promise(.success(response))
                 },
                 onError: { error in
-                    single(.error(error))
+                    promise(.failure(error))
                 }
             )
-            return Disposables.create { task?.cancel() }
-        }
+            
+//            Disposables.create { task?.cancel() } // FIXME: does Future cancels requests under the hood?
+        }.eraseToAnyPublisher()
     }
     
 }

@@ -6,7 +6,7 @@
 //  Copyright © 2019 dpanchuk. All rights reserved.
 //
 
-import RxSwift
+import UIKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -31,21 +31,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 private extension AppDelegate {
     
     func startApplicationWithCoordinator() {
-        #if DEBUG
-        setupRxResourceLogging()
-        #endif
-        
         window = UIWindow(frame: UIScreen.main.bounds)
         coordinator = AppCoordinator(window: window)
         coordinator?.start()
-    }
-    
-    func setupRxResourceLogging() {
-        _ = Observable<Int>
-            .interval(.seconds(1), scheduler: MainScheduler.instance)
-            .subscribe { _ in
-                print("RxSwift resources count: \(RxSwift.Resources.total).")
-        }
     }
     
 }

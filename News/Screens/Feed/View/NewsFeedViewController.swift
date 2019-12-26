@@ -6,8 +6,8 @@
 //  Copyright © 2019 dpanchuk. All rights reserved.
 //
 
-import RxSwift
-import RxCocoa
+import UIKit
+import Combine
 
 final class NewsFeedViewController: UIViewController, Storyboarded {
     
@@ -20,15 +20,17 @@ final class NewsFeedViewController: UIViewController, Storyboarded {
     // MARK: Outlets & UI elements
     @IBOutlet private weak var articlesTableView: UITableView!
     private let refreshControl = UIRefreshControl()
+    private let errorPresenter = ErrorPresenter()
     
     // MARK: Properties
     var viewModel: NewsFeed.ViewModel!
     var onArticleSelect: ((ArticleViewModel) -> Void)?
     
+    @Published private var selectedArticleIndex: Int?
+    
+    private var dataSource: UITableViewDiffableDataSource<Section, ArticleViewModel>?
     private var renderedProps: Props?
-    private let errorPresenter = ErrorPresenter()
-    private let articlesSubject = BehaviorRelay<[ArticleViewModel]>(value: [])
-    private let disposeBag = DisposeBag()
+    private var cancellables = Set<AnyCancellable>()
     
     // MARK: Lifecycle
     override func viewDidLoad() {
@@ -50,62 +52,96 @@ final class NewsFeedViewController: UIViewController, Storyboarded {
             UINib(nibName: "ArticleTableViewCell", bundle: nil),
             forCellReuseIdentifier: ArticleTableViewCell.reuseIdentifier
         )
-        articlesTableView.rx.willDisplayCell
-            .subscribe(onNext: { UIView.animateAppearence(view: $0.cell, dx: -100) })
-            .disposed(by: disposeBag)
         
-        articlesSubject
-            .asDriver()
-            .drive(articlesTableView.rx.items(
-                cellIdentifier: ArticleTableViewCell.reuseIdentifier,
-                cellType: ArticleTableViewCell.self)
-            ) { (_, articleViewModel, cell) in
-                let props = NewsFeed.makeArticleCellProps(from: articleViewModel)
-                cell.renderProps(props)
-            }
-            .disposed(by: disposeBag)
+        articlesTableView.delegate = self
+        configureDataSource()
     }
     
     private func initRefreshControl() {
         articlesTableView.insertSubview(refreshControl, at: 0)
     }
     
-    private func initBindings() {        
-        let articlesTableViewUpdate = articlesTableView.rx.contentOffset
+    private func initBindings() {
+        let didPullToRefresh = refreshControl.publisher(for: .valueChanged)
+            .map { _ in Void() }
+            .eraseToAnyPublisher()
+        
+        let contentOffsetDidChange = articlesTableView.publisher(for: \.contentOffset)
             .map { [unowned self] _ in self.articlesTableView.isNearBottomEdge() }
-            .distinctUntilChanged()
+            .removeDuplicates()
+            .eraseToAnyPublisher()
         
         let outputs = viewModel.makeOutputs(from:
             NewsFeed.ViewModel.Inputs(
-                pullToRefresh: refreshControl.rx.controlEvent(.valueChanged).asObservable(),
-                contentOffsetChange: articlesTableViewUpdate,
-                articleSelect: articlesTableView.rx.modelSelected(ArticleViewModel.self).asObservable()
+                pullToRefresh: didPullToRefresh,
+                contentOffsetChange: contentOffsetDidChange,
+                articleSelect: $selectedArticleIndex.compactMap{ $0 }.eraseToAnyPublisher()
             )
         )
         
         outputs.props
-            .observeOn(MainScheduler.instance)
-            .subscribe(onNext: { [unowned self] in self.render(props: $0) })
-            .disposed(by: disposeBag)
-        
-        outputs.stateChanges
-            .subscribe()
-            .disposed(by: disposeBag)
+            .receive(on: RunLoop.main)
+            .sink(receiveValue: { [unowned self] in self.render(props: $0) })
+            .store(in: &cancellables)
         
         outputs.route
-            .observeOn(MainScheduler.instance)
-            .subscribe(onNext: { [unowned self] route in
+            .receive(on: RunLoop.main)
+            .sink(receiveValue: { [unowned self] route in
                 switch route {
                 case let .articleDetails(article):
                     self.onArticleSelect?(article)
                 }
             })
-            .disposed(by: disposeBag)
+            .store(in: &cancellables)
+        
+        outputs.stateChanges
+            .sink(receiveValue: {})
+            .store(in: &cancellables)
     }
+    
+}
+
+// MARK: - DataSource
+enum Section: CaseIterable {
+    case main
+}
+
+typealias ArticlesSnapshot = NSDiffableDataSourceSnapshot<Section, ArticleViewModel>
+
+extension NewsFeedViewController {
+    
+    private func configureDataSource() {
+        dataSource = UITableViewDiffableDataSource<Section, ArticleViewModel>(tableView: articlesTableView) {
+                (tableView: UITableView, indexPath: IndexPath, articleViewModel: ArticleViewModel) -> UITableViewCell? in
+            
+            let cell = tableView.dequeueReusableCell(
+                withIdentifier: ArticleTableViewCell.reuseIdentifier, for: indexPath
+            ) as? ArticleTableViewCell
+            
+            let props = NewsFeed.makeArticleCellProps(from: articleViewModel)
+            cell?.renderProps(props)
+            return cell
+        }
+    }
+    
+}
+
+// MARK: - UITableViewDelegate
+extension NewsFeedViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        selectedArticleIndex = indexPath.row
+    }
+
+}
+
+// MARK: - Props Rendering
+extension NewsFeedViewController {
     
     private func render(props: Props) {
         if renderedProps?.articles != props.articles {
-            articlesSubject.accept(props.articles)
+            let snapshot = makeSnapshot(from: props.articles)
+            dataSource?.apply(snapshot)
         }
         
         if renderedProps?.isReloading != props.isReloading {
@@ -117,6 +153,13 @@ final class NewsFeedViewController: UIViewController, Storyboarded {
         }
         
         renderedProps = props
+    }
+    
+    private func makeSnapshot(from articles: [ArticleViewModel]) -> ArticlesSnapshot {
+        var snapshot = ArticlesSnapshot()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(articles, toSection: .main)
+        return snapshot
     }
     
     private func toggleRefreshControlLoading(to state: Bool) {

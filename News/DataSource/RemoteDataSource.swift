@@ -6,7 +6,7 @@
 //  Copyright © 2019 dpanchuk. All rights reserved.
 //
 
-import RxSwift
+import Combine
 
 struct RemoteDataSource: DataSource {
     
@@ -16,7 +16,7 @@ struct RemoteDataSource: DataSource {
         self.newsApi = newsApi
     }
     
-    func getEverythingNews(query: String, page: Int) -> Single<PagedArticlesDTO> {
+    func getEverythingNews(query: String, page: Int) -> AnyPublisher<PagedArticlesDTO, NetworkError> {
         return newsApi.getEverythingNews(query: query, page: page)
     }
     

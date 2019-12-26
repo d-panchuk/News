@@ -6,7 +6,7 @@
 //  Copyright © 2019 dpanchuk. All rights reserved.
 //
 
-import RxSwift
+import Combine
 
 struct NewsApi {
     
@@ -16,7 +16,7 @@ struct NewsApi {
         self.networkManager = networkManager
     }
     
-    func getEverythingNews(query: String, page: Int) -> Single<PagedArticlesDTO> {
+    func getEverythingNews(query: String, page: Int) -> AnyPublisher<PagedArticlesDTO, NetworkError> {
         let request = GetEverythingNewsRequest(query: query, page: page)
         return networkManager.execute(request: request)
     }

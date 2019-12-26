@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct ArticleViewModel: Equatable {
+struct ArticleViewModel: Hashable {
     let author: String?
     let title: String
     let description: String?
