@@ -10,7 +10,9 @@ import UIKit
 import Combine
 
 /// A custom subscription to capture UIControl target events.
-final class UIControlSubscription<SubscriberType: Subscriber, Control: UIControl>: Subscription where SubscriberType.Input == Control {
+final class UIControlSubscription<SubscriberType: Subscriber, Control: UIControl>: Subscription
+    where SubscriberType.Input == Control {
+    
     private var subscriber: SubscriberType?
     private let control: Control
 
@@ -32,4 +34,5 @@ final class UIControlSubscription<SubscriberType: Subscriber, Control: UIControl
     @objc private func eventHandler() {
         _ = subscriber?.receive(control)
     }
+    
 }
